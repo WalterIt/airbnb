@@ -12,9 +12,6 @@ axios.defaults.baseURL = "http://localhost:4000";
 axios.defaults.withCredentials = true;
 
 function App() {
-<<<<<<< HEAD
-  return <div className="bg-red-500">Test</div>;
-=======
   return (
     <UserContextProvider>
       <Routes>
@@ -28,7 +25,6 @@ function App() {
       </Routes>
     </UserContextProvider>
   );
->>>>>>> 03_Account_page
 }
 
 export default App;
