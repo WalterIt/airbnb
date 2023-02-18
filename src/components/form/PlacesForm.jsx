@@ -1,11 +1,12 @@
 import axios from "axios";
-import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Navigate, useParams } from "react-router-dom";
 import AccountNav from "../accountNav/AccountNav";
 import Perks from "./Perks";
 import PhotosUploader from "./PhotosUploader";
 
 export default function PlacesForm() {
+  const { id } = useParams();
   const [title, setTitle] = useState("");
   const [address, setAddress] = useState("");
   const [description, setDescription] = useState("");
@@ -16,6 +17,24 @@ export default function PlacesForm() {
   const [maxGuests, setMaxGuests] = useState(1);
   const [redirect, setRedirect] = useState(false);
   const [addedPhotos, setAddedPhotos] = useState([]);
+
+  useEffect(() => {
+    if (!id) {
+      return;
+    }
+    axios.get("/places/" + id).then((response) => {
+      const { data } = response;
+      setTitle(data.title);
+      setAddress(data.address);
+      setAddedPhotos(data.photos);
+      setDescription(data.description);
+      setPerks(data.perks);
+      setExtraInfo(data.extraInfo);
+      setCheckIn(data.checkIn);
+      setCheckOut(data.checkOut);
+      setMaxGuests(data.maxGuests);
+    });
+  }, [id]);
 
   function inputHeader(text) {
     return <h2 className="text-2xl mt-4">{text}: </h2>;
@@ -34,8 +53,9 @@ export default function PlacesForm() {
     );
   }
 
-  async function addNewPlace(e) {
+  async function savePlace(e) {
     e.preventDefault();
+
     const placeData = {
       title,
       address,
@@ -47,9 +67,17 @@ export default function PlacesForm() {
       checkOut,
       maxGuests,
     };
-    console.log(placeData);
-    await axios.post("/places", placeData);
-    setRedirect(true);
+    // console.log(placeData);
+
+    if (id) {
+      // Update Place
+      await axios.put("/places", { id, ...placeData });
+      setRedirect(true);
+    } else {
+      // Add New Place
+      await axios.post("/places", placeData);
+      setRedirect(true);
+    }
   }
 
   if (redirect) {
@@ -59,7 +87,7 @@ export default function PlacesForm() {
   return (
     <div className="">
       <AccountNav />
-      <form onSubmit={addNewPlace}>
+      <form onSubmit={savePlace}>
         {preInput(
           "Title",
           "The Title for your place should be short and catchy as in advertisements."
