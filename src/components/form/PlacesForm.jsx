@@ -15,8 +15,9 @@ export default function PlacesForm() {
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [maxGuests, setMaxGuests] = useState(1);
-  const [redirect, setRedirect] = useState(false);
   const [addedPhotos, setAddedPhotos] = useState([]);
+  const [price, setPrice] = useState(50);
+  const [redirect, setRedirect] = useState(false);
 
   useEffect(() => {
     if (!id) {
@@ -33,6 +34,7 @@ export default function PlacesForm() {
       setCheckIn(data.checkIn);
       setCheckOut(data.checkOut);
       setMaxGuests(data.maxGuests);
+      setPrice(data.price);
     });
   }, [id]);
 
@@ -66,6 +68,7 @@ export default function PlacesForm() {
       checkIn,
       checkOut,
       maxGuests,
+      price,
     };
     // console.log(placeData);
 
@@ -131,7 +134,7 @@ export default function PlacesForm() {
           "Add check in & check out times. Remember to have some time window for cleaning the room between guests."
         )}
 
-        <div className="grid gap-2 sm:grid-cols-3">
+        <div className="grid gap-2 grid-cols-2 md:grid-cols-4">
           <div>
             <h3 className="mt-2 -mb-1">Check In Time:</h3>
             <input
@@ -157,6 +160,15 @@ export default function PlacesForm() {
               value={maxGuests}
               onChange={(e) => setMaxGuests(e.target.value)}
               placeholder="1"
+            />
+          </div>
+          <div>
+            <h3 className="mt-2 -mb-1">Price per Night:</h3>
+            <input
+              type="number"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              placeholder="US$ 50"
             />
           </div>
         </div>
