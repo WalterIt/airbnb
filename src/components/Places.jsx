@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import AccountNav from "./accountNav/AccountNav";
+import { url } from "../App";
 
 export default function Places() {
   const [places, setPlaces] = useState([]);
-  const url = "http://localhost:4000/uploads/";
 
   useEffect(() => {
     axios
@@ -45,8 +45,9 @@ export default function Places() {
       </div>
       <div className="mt-6">
         {places.length > 0 &&
-          places.map((place) => (
+          places.map((place, i) => (
             <Link
+              key={i}
               to={`/account/places/${place._id}`}
               className="flex mt-2 cursor-pointer gap-4 bg-gray-100 p-4 rounded-2xl"
             >

@@ -99,6 +99,7 @@ export default function PlacesForm() {
           type="text"
           placeholder="Title, for example: My lovely apt"
           value={title}
+          required
           onChange={(e) => setTitle(e.target.value)}
         />
         {preInput("Address", "Add an Address to this place")}
@@ -107,6 +108,7 @@ export default function PlacesForm() {
           type="text"
           placeholder="Address"
           value={address}
+          required
           onChange={(e) => setAddress(e.target.value)}
         />
 
@@ -116,6 +118,7 @@ export default function PlacesForm() {
         {preInput("Description", "Describe this place.")}
 
         <textarea
+          required
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         ></textarea>
@@ -139,6 +142,7 @@ export default function PlacesForm() {
             <h3 className="mt-2 -mb-1">Check In Time:</h3>
             <input
               type="text"
+              required
               value={checkIn}
               onChange={(e) => setCheckIn(e.target.value)}
               placeholder="14:00"
@@ -150,6 +154,7 @@ export default function PlacesForm() {
               type="text"
               value={checkOut}
               onChange={(e) => setCheckOut(e.target.value)}
+              required
               placeholder="11:00"
             />
           </div>

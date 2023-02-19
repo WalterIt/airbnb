@@ -10,9 +10,13 @@ import Profile from "./pages/Profile";
 import Places from "./components/Places";
 import PlacesForm from "./components/form/PlacesForm";
 import Place from "./components/Place";
+import Bookings from "./components/Bookings";
+import Booking from "./components/Booking";
 
 axios.defaults.baseURL = "http://localhost:4000";
 axios.defaults.withCredentials = true;
+
+export const url = "http://localhost:4000/uploads/";
 
 function App() {
   return (
@@ -27,6 +31,8 @@ function App() {
           <Route path="/account/places/new" element={<PlacesForm />} />
           <Route path="/account/places/:id" element={<PlacesForm />} />
           <Route path="/place/:id" element={<Place />} />
+          <Route path="/account/bookings" element={<Bookings />} />
+          <Route path="/account/bookings/:id" element={<Booking />} />
         </Route>
       </Routes>
     </UserContextProvider>

@@ -38,7 +38,10 @@ export default function Profile() {
       <AccountNav />
       {subpage === "profile" && (
         <div className="text-center max-w-sm mx-auto">
-          Logged in as {user.name} - {user.email}
+          Logged in as{" "}
+          <b>
+            {user.name} - {user.email}
+          </b>
           <br />
           <button onClick={logout} className="primary max-w-sm mt-3">
             Logout
