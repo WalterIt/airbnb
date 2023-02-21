@@ -1,27 +1,33 @@
 import { useContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import axios from "axios";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { differenceInCalendarDays } from "date-fns";
 import { UserContext } from "../../UserContext";
 
 export default function BookingWidget({ place }) {
+  const navigate = useNavigate();
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [numberGuests, setNumberGuests] = useState(1);
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [redirect, setRedirect] = useState("");
+  const [redirectToLogin, setRedirectToLogin] = useState("");
+  const [message, setMessage] = useState("");
   const { user } = useContext(UserContext);
 
   useEffect(() => {
     if (user) {
       setName(user.name);
+      setEmail(user.email);
     }
   }, [user]);
 
   let numberNights = 0;
 
-  if (checkIn && checkOut) {
+  if (checkIn && checkOut && user) {
     numberNights = differenceInCalendarDays(
       new Date(checkOut),
       new Date(checkIn)
@@ -36,13 +42,41 @@ export default function BookingWidget({ place }) {
       checkOut,
       numberGuests,
       name,
+      email,
       phone,
       price: numberNights * place.price,
     };
-    const response = await axios.post("/bookings", formData);
-    const bookingId = response.data._id;
-    // console.log(bookingId);
-    setRedirect(`/account/bookings/${bookingId}`);
+
+    try {
+      if (!user) {
+        setRedirectToLogin("/login");
+        return toast.error("You must log in in order to make a reservation!");
+      }
+
+      if (!name || !phone) {
+        return toast.error("All fields are required!");
+      }
+      if (phone.length < 6) {
+        return toast.error(
+          "Phone Number Invalid. Please, enter a valid number!"
+        );
+      }
+
+      const response = await axios.post("/bookings", formData);
+      const bookingId = response.data._id;
+      // console.log(bookingId);
+      setRedirect(`/account/bookings/${bookingId}`);
+    } catch (error) {
+      if (error) {
+        return toast.error(
+          "Booking Reservation Failed! Please, try again later."
+        );
+      }
+    }
+  }
+
+  if (redirectToLogin) {
+    return <Navigate to={redirectToLogin} />;
   }
 
   if (redirect) {
@@ -53,7 +87,14 @@ export default function BookingWidget({ place }) {
     <div className="">
       <div className="bg-white shadow p-4 rounded-2xl">
         <p className="text-xl text-center">
-          <b>Price: $ {place.price}</b> per Night
+          <b>
+            Price:{" "}
+            {new Intl.NumberFormat("en-US", {
+              style: "currency",
+              currency: "USD",
+            }).format(place.price)}
+          </b>{" "}
+          per Night
         </p>
         <div className="border rounded-2xl mt-4">
           <div className="flex">
@@ -98,7 +139,20 @@ export default function BookingWidget({ place }) {
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                required
               />
+              <label>
+                <b>Your Email: </b>
+              </label>
+              <input
+                type="text"
+                // value={email}
+                disabled
+                placeholder={email}
+                // onChange={(e) => setName(e.target.value)}
+                required
+              />
+
               <label>
                 <b>Your Phone Number: </b>
               </label>
@@ -106,6 +160,7 @@ export default function BookingWidget({ place }) {
                 type="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
+                required
               />
             </div>
           )}

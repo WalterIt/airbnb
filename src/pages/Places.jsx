@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import AccountNav from "./accountNav/AccountNav";
+import AccountNav from "../components/accountNav/AccountNav";
 import { url } from "../App";
 
 export default function Places() {

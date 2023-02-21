@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import AddressLink from "./AddressLink";
-import BookingDates from "./BookingDates";
-import PlaceGallery from "./PlaceGallery";
+import AddressLink from "../components/pages/AddressLink";
+import BookingDates from "../components/pages/BookingDates";
+import PlaceGallery from "../components/pages/PlaceGallery";
 
 export default function Booking() {
   const { id } = useParams();
@@ -32,7 +32,13 @@ export default function Booking() {
           <BookingDates booking={booking} />
         </div>
         <div className="bg-primary p-6 text-white rounded-2xl">
-          <p>Total Price: </p> <p className="text-3xl">$ {booking.price} </p>
+          <p className="font-bold">Total Price: </p>{" "}
+          <p className="text-3xl">
+            {new Intl.NumberFormat("en-US", {
+              style: "currency",
+              currency: "USD",
+            }).format(booking.price)}
+          </p>
         </div>
       </div>
       <PlaceGallery place={booking.place} />

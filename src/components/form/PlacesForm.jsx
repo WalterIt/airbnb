@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import AccountNav from "../accountNav/AccountNav";
@@ -72,14 +73,37 @@ export default function PlacesForm() {
     };
     // console.log(placeData);
 
-    if (id) {
-      // Update Place
-      await axios.put("/places", { id, ...placeData });
-      setRedirect(true);
-    } else {
-      // Add New Place
-      await axios.post("/places", placeData);
-      setRedirect(true);
+    try {
+      if (
+        !title ||
+        !address ||
+        !description ||
+        !checkIn ||
+        !maxGuests ||
+        !price
+      ) {
+        return toast.error("All fields are required!");
+      }
+
+      if (addedPhotos.length === 0) {
+        return toast.error("You must add photos of your place!");
+      }
+
+      if (id) {
+        // Update Place
+        await axios.put("/places", { id, ...placeData });
+        setRedirect(true);
+      } else {
+        // Add New Place
+        await axios.post("/places", placeData);
+        setRedirect(true);
+      }
+    } catch (error) {
+      if (error) {
+        return toast.error(
+          "Adding a New Place Failed! Please, try again later."
+        );
+      }
     }
   }
 
@@ -165,6 +189,7 @@ export default function PlacesForm() {
               value={maxGuests}
               onChange={(e) => setMaxGuests(e.target.value)}
               placeholder="1"
+              required
             />
           </div>
           <div>
@@ -174,6 +199,7 @@ export default function PlacesForm() {
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               placeholder="US$ 50"
+              required
             />
           </div>
         </div>

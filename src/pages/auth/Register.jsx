@@ -1,8 +1,10 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import { Link, Navigate } from "react-router-dom";
 import axios from "axios";
 
 export default function Register() {
+  const [redirect, setRedirect] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -11,13 +13,29 @@ export default function Register() {
     e.preventDefault();
 
     try {
-      await axios.post("/register", { name, email, password });
-      alert("Registration Successful. Now you can log in!");
+      if (!name || !email || !password) {
+        return toast.error("All fields are required!");
+      }
+
+      if (password.length < 6) {
+        return toast.error("Password must be at least 6 characters!");
+      }
+
+      const success = await axios.post("/register", { name, email, password });
+      if (success) {
+        setRedirect(true);
+        return toast.success("Registration Successful. Now you can log in!");
+      }
     } catch (error) {
-      alert("Registration Failed! Please, try again later.");
+      if (error) {
+        return toast.error("Registration Failed! Please, try again later.");
+      }
     }
   }
 
+  if (redirect) {
+    return <Navigate to={"/login"} />;
+  }
   return (
     <div className="mt-6 grow flex items-center justify-around">
       <div className="mb-60">

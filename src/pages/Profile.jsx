@@ -2,7 +2,7 @@ import axios from "axios";
 import { useContext, useState } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import AccountNav from "../components/accountNav/AccountNav";
-import Places from "../components/Places";
+import Places from "./Places";
 import { UserContext } from "../UserContext";
 
 export default function Profile() {

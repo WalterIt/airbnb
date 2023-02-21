@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { url } from "../App";
+import { url } from "../../App";
 
 export default function PlaceGallery({ place }) {
   const [showAllPhotos, setShowAllPhotos] = useState(false);
