@@ -17,7 +17,7 @@ import Bookings from "./pages/Bookings";
 import Booking from "./pages/Booking";
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
-axios.defaults.withCredentials = true;
+// axios.defaults.withCredentials = true;
 
 export const url = import.meta.env.VITE_API_IMG_URL;
 
