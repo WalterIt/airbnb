@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { url } from "../../App";
+import Image from "../form/Image";
 
 export default function PlaceGallery({ place }) {
   const [showAllPhotos, setShowAllPhotos] = useState(false);
@@ -32,7 +32,7 @@ export default function PlaceGallery({ place }) {
           {place.photos?.length > 0 &&
             place.photos.map((photo, i) => (
               <div key={i} className="">
-                <img src={url + photo} alt="" />
+                <Image src={photo} alt="" />
               </div>
             ))}
         </div>
@@ -49,9 +49,9 @@ export default function PlaceGallery({ place }) {
         <div>
           {place.photos?.[0] && (
             <div>
-              <img
+              <Image
                 className="aspect-square object-cover"
-                src={url + place.photos[0]}
+                src={place.photos[0]}
                 alt=""
               />
             </div>
@@ -59,17 +59,17 @@ export default function PlaceGallery({ place }) {
         </div>
         <div className="grid">
           {place.photos?.[1] && (
-            <img
+            <Image
               className="aspect-square object-cover"
-              src={url + place.photos[1]}
+              src={place.photos[1]}
               alt=""
             />
           )}
           <div className=" overflow-hidden">
             {place.photos?.[2] && (
-              <img
+              <Image
                 className="aspect-square object-cover relative top-2"
-                src={url + place.photos[2]}
+                src={place.photos[2]}
                 alt=""
               />
             )}
